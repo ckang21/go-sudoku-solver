@@ -25,3 +25,12 @@ _(Underscores `_` represent empty spaces that need to be filled.)_
    cd go-sudoku-solver
 2. **Run the Program:**
     go run sudoku.go
+
+
+## Future Improvements
+- ✅ Add support for inputting a custom Sudoku grid
+- ✅ Allow the user to choose between multiple puzzles
+- ✅ Implement a visual interface using Go graphics
+
+## Author
+Built by Christian Kang as part of a coding challenge to implement a Sudoku solver in Go.
