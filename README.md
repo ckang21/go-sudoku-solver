@@ -8,10 +8,10 @@ This is a beginner-friendly Sudoku solver written in Go. It uses **basic solving
 - If a solution exists, the program prints the solved Sudoku board.
 
 ## 🖥️ Example Input
-5 3 _ | _ 7 _ | _ _ _ | 6 _ _ | 1 9 5 | _ _ _ | _ 9 8 | _ _ _ | _ 6 _
-8 _ _ | _ 6 _ | _ _ 3 | 4 _ _ | 8 _ 3 | _ _ 1 | 7 _ _ | _ 2 _ | _ _ 6
-_ 6 _ | _ _ _ | 2 8 _ | _ _ _ | 4 1 9 | _ _ 5 | _ _ _ | _ 8 _ | _ 7 9
-_(Underscores `_` represent empty spaces that need to be filled.)_
+- 5 3 _ | _ 7 _ | _ _ _ | 6 _ _ | 1 9 5 | _ _ _ | _ 9 8 | _ _ _ | _ 6 _
+- 8 _ _ | _ 6 _ | _ _ 3 | 4 _ _ | 8 _ 3 | _ _ 1 | 7 _ _ | _ 2 _ | _ _ 6
+- _ 6 _ | _ _ _ | 2 8 _ | _ _ _ | 4 1 9 | _ _ 5 | _ _ _ | _ 8 _ | _ 7 9
+- _(Underscores `_` represent empty spaces that need to be filled.)_
 
 ## 🎯 Features
 - ✅ Solves standard **9x9 Sudoku puzzles**.
