@@ -2,6 +2,21 @@ package main
 
 import "fmt"
 
+func printGrid(grid [][]int) {
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			fmt.Print(grid[i][j], " ")
+			if (j+1)%3 == 0 && j < 8 {
+				fmt.Print("| ")
+			}
+		}
+		fmt.Println()
+		if (i+1)%3 == 0 && i < 8 {
+			fmt.Println("----------------------------")
+		}
+	}
+}
+
 func checkALL(grid [][]int, row, col int) []int {
 	if grid[row][col] != 0 { // We can check if it has a number already. We don't need to do anything if it does
 		return []int{}
@@ -9,14 +24,18 @@ func checkALL(grid [][]int, row, col int) []int {
 
 	// Map to track what numbers are possible for that square
 	possibilities := make(map[int]bool)
-	for i := 1; i <= 8; i++ {
+	for i := 1; i <= 9; i++ {
 		possibilities[i] = true
 	}
 
 	// Check the row then column
-	for i := 0; i <= 8; i++ {
-		delete(possibilities, grid[row][i]) // Get rid of any found numbers in the row
-		delete(possibilities, grid[i][col]) // Get rid of any found numbers in the column
+	for i := 0; i < 9; i++ {
+		if grid[row][i] != 0 {
+			delete(possibilities, grid[row][i])
+		}
+		if grid[i][col] != 0 {
+			delete(possibilities, grid[i][col])
+		}
 	}
 
 	// Check the 3x3 square
@@ -35,41 +54,56 @@ func checkALL(grid [][]int, row, col int) []int {
 	return validNumbers
 }
 
+func findEmptyCell(grid [][]int) []int { // Meant to go through the grid to find us the coordinates of an empty cell
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == 0 {
+				return []int{i, j} // Return the coordinates if we have one.
+			}
+		}
+	}
+	return []int{-1, -1} // Return this if all is filled.
+}
+
+func solveSudoku(grid [][]int) bool {
+	coord := findEmptyCell(grid)
+
+	if coord[0] == -1 && coord[1] == -1 { // If there are no empty cells we should get -1 and -1
+		return true
+	}
+
+	// Get possibilities
+	validAnswers := checkALL(grid, coord[0], coord[1])
+
+	for _, num := range validAnswers {
+		grid[coord[0]][coord[1]] = num // Set that number into the coordinates
+		if solveSudoku(grid) {
+			return true // If it gets us the answer stop
+		}
+		grid[coord[0]][coord[1]] = 0 // Undo
+	}
+	return false // If false then we can't solve this
+}
+
 func main() {
 	grid := [][]int{
-		{5, 3, 0, 0, 7, 0, 0, 0, 0},
-		{6, 0, 0, 1, 9, 5, 0, 0, 0},
-		{0, 9, 8, 0, 0, 0, 0, 6, 0},
-		{8, 0, 0, 0, 6, 0, 0, 0, 3},
-		{4, 0, 0, 8, 0, 3, 0, 0, 1},
-		{7, 0, 0, 0, 2, 0, 0, 0, 6},
-		{0, 6, 0, 0, 0, 0, 2, 8, 0},
-		{0, 0, 0, 4, 1, 9, 0, 0, 5},
-		{0, 0, 0, 0, 8, 0, 0, 7, 9},
+		{0, 0, 4, 2, 0, 1, 9, 6, 0},
+		{9, 0, 6, 7, 4, 5, 2, 1, 0},
+		{3, 0, 1, 9, 0, 0, 4, 0, 0},
+		{0, 3, 5, 0, 7, 2, 8, 0, 6},
+		{6, 0, 0, 0, 5, 0, 7, 0, 0},
+		{2, 0, 8, 3, 9, 6, 1, 0, 0},
+		{5, 4, 0, 0, 2, 0, 0, 8, 1},
+		{8, 9, 2, 0, 1, 0, 0, 0, 4},
+		{0, 0, 0, 4, 0, 7, 0, 2, 0},
 	}
+	fmt.Println("Starting Sudoku Solver...\n")
+	printGrid(grid) // Print initial grid
 
-	row, col := 0, 2
-
-	possibileValues := checkALL(grid, row, col)
-	fmt.Printf("Possible values for cell (%d, %d): %v\n", row, col, possibileValues)
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[0]); j++ {
-			fmt.Print(grid[i][j], " ")
-			if (j+1)%3 == 0 && j < 8 {
-				fmt.Print("| ")
-			}
-		}
-		fmt.Println()
-		if (i+1)%3 == 0 && i < 8 {
-			fmt.Println("----------------------------")
-		}
-	}
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[0]); j++ {
-			possibileValues := checkALL(grid, i, j)
-			if len(possibileValues) != 0 {
-				fmt.Printf("Possible values for cell (%d, %d): %v\n", i, j, possibileValues)
-			}
-		}
+	if solveSudoku(grid) {
+		fmt.Println("\nSudoku Solved!\n")
+		printGrid(grid) // Print solved grid
+	} else {
+		fmt.Println("\nNo solution exists.")
 	}
 }
